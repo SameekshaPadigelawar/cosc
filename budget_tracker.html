@@ -1,0 +1,151 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Budget Tracker - Dark Mode</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #121212;
+      color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #ffffff;
+      margin: 40px 0 20px;
+      font-weight: 700;
+      font-size: 28px;
+      text-align: center;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      width: 90%;
+      max-width: 500px;
+    }
+
+    .form input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      background: #2a2a2a;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+    }
+
+    .form input:focus {
+      outline: 2px solid #03dac6;
+    }
+
+    .form button {
+      width: 100%;
+      padding: 12px;
+      background: #03dac6;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form button:hover {
+      background: #00bfa5;
+    }
+
+    canvas {
+      margin-top: 30px;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💰 Budget Tracker </h1>
+
+  <div class="container">
+    <div class="form">
+      <input type="text" id="category" placeholder="Enter category (e.g. Food)">
+      <input type="number" id="amount" placeholder="Enter amount">
+      <button onclick="addExpense()">➕ Add Expense</button>
+    </div>
+
+    <canvas id="expenseChart"></canvas>
+  </div>
+
+  <script>
+    const categories = [];
+    const amounts = [];
+
+    const ctx = document.getElementById('expenseChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: categories,
+        datasets: [{
+          label: 'Expenses',
+          data: amounts,
+          backgroundColor: [
+            '#ff6b6b', '#feca57', '#1dd1a1', '#5f27cd', '#54a0ff',
+            '#ff9ff3', '#48dbfb', '#00d2d3', '#ffb8b8', '#c8d6e5'
+          ],
+          borderColor: "#1e1e1e",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#ccc',
+              font: {
+                size: 14
+              }
+            }
+          }
+        }
+      }
+    });
+
+    function addExpense() {
+      const category = document.getElementById('category').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+
+      if (category && !isNaN(amount) && amount > 0) {
+        categories.push(category);
+        amounts.push(amount);
+        chart.update();
+
+        document.getElementById('category').value = '';
+        document.getElementById('amount').value = '';
+      } else {
+        alert("Please enter a valid category and amount.");
+      }
+    }
+  </script>
+
+</body>
+</html>
